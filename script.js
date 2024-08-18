@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const post = document.createElement('div');
         post.className = 'post';
 
-        const user = 'उपयोगकर्ता'; // Replace with dynamic user data
+        const user = 'User'; // Replace with dynamic user data
         const timestamp = new Date().toLocaleString();
 
         post.innerHTML = `
