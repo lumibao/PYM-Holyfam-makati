@@ -1,18 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.getElementById('login-button');
     const postButton = document.getElementById('post-button');
     const postContent = document.getElementById('post-content');
     const postsContainer = document.getElementById('posts');
+    const loginSection = document.getElementById('login-section');
+    const newPostSection = document.getElementById('new-post');
+    const usernameInput = document.getElementById('username');
+    const loginMessage = document.getElementById('login-message');
+
+    // Check if user is logged in
+    function checkLogin() {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            loginSection.style.display = 'none';
+            newPostSection.style.display = 'block';
+            postsContainer.style.display = 'block';
+            loadPosts();
+        } else {
+            loginSection.style.display = 'block';
+            newPostSection.style.display = 'none';
+            postsContainer.style.display = 'none';
+        }
+    }
+
+    // Handle login button click
+    loginButton.addEventListener('click', () => {
+        const username = usernameInput.value.trim();
+        
+        if (username) {
+            localStorage.setItem('loggedInUser', username);
+            loginMessage.textContent = '';
+            checkLogin();
+        } else {
+            loginMessage.textContent = 'Please enter a username.';
+        }
+    });
 
     // Function to create a new post element
     function createPost(content) {
         const post = document.createElement('div');
         post.className = 'post';
 
-        const user = 'User'; // Replace with dynamic user data
+        // Display post anonymously
         const timestamp = new Date().toLocaleString();
 
         post.innerHTML = `
-            <div class="user">${user}</div>
             <div class="timestamp">${timestamp}</div>
             <div class="content">${content}</div>
         `;
@@ -46,6 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Load posts when the page is loaded
-    loadPosts();
+    // Check login status on page load
+    checkLogin();
 });
