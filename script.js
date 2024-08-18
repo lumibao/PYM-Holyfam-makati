@@ -1,24 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const content = document.getElementById('content');
-    
-    // Function to load content from another HTML file
-    function loadContent(page) {
-        fetch(page)
-            .then(response => response.text())
-            .then(data => {
-                // Extract content from the fetched HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
-                content.innerHTML = doc.querySelector('main').innerHTML;
-            })
-            .catch(error => {
-                console.error('Error loading content:', error);
-                content.innerHTML = '<p>Sorry, the content could not be loaded.</p>';
-            });
+    const postButton = document.getElementById('post-button');
+    const postContent = document.getElementById('post-content');
+    const postsContainer = document.getElementById('posts');
+
+    // Function to create a new post element
+    function createPost(content) {
+        const post = document.createElement('div');
+        post.className = 'post';
+
+        const user = 'User'; // Replace with dynamic user data
+        const timestamp = new Date().toLocaleString();
+
+        post.innerHTML = `
+            <div class="user">${user}</div>
+            <div class="timestamp">${timestamp}</div>
+            <div class="content">${content}</div>
+        `;
+        return post;
     }
 
-    // Load the content for the current page
-    const path = window.location.pathname;
-    const page = path.endsWith('index.html') ? 'home.html' : path.split('/').pop();
-    loadContent(page);
+    // Event listener for the post button
+    postButton.addEventListener('click', () => {
+        const content = postContent.value.trim();
+        if (content) {
+            const newPost = createPost(content);
+            postsContainer.prepend(newPost);
+            postContent.value = '';
+        }
+    });
 });
