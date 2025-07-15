@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suprise Gift</title>
+
+  <!-- 🌸 Thumbnail preview when link is shared -->
+  <meta property="og:title" content="Happy Birthday My Love!" />
+  <meta property="og:description" content="A birthday surprise for you 💌 Click to open it!" />
+  <meta property="og:image" content="https://drive.google.com/file/d/1ish-eoH7BGbNAEU5ypwy6I_qOSOIr9lJ/view?usp=drivesdk" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https:https://drive.google.com/" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-purple: #a18cd1;
+      --dark-purple: #432c64;
+      --light-purple: #c3a5e6;
+      --white: #fff;
+      --text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to top, #a18cd1, #432c64);
+      color: var(--white);
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(45deg, #ff4da6, #ff99cc);
+      transform: rotate(45deg);
+      animation: fall linear infinite;
+      opacity: 0.8;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: #2e1b45;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      z-index: 9999;
+      animation: fadeOut 1s ease 5s forwards;
+      color: var(--white);
+    }
+
+    .garden {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tulip {
+      width: 50px;
+      height: 100px;
+      opacity: 0;
+      transform: translateY(30px) scale(0.8);
+      animation: bloom 2s forwards ease-out;
+    }
+
+    .tulip:nth-child(1) { animation-delay: 1s; }
+    .tulip:nth-child(2) { animation-delay: 1.5s; }
+
+    @keyframes bloom {
+      0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+      60% { opacity: 1; transform: translateY(-10px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .music-button {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--white);
+      color: var(--dark-purple);
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .music-button.playing {
+      transform: rotate(20deg) scale(1.2);
+      background: var(--light-purple);
+    }
+
+    .container {
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .container.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      text-shadow: var(--text-shadow);
+    }
+
+    button {
+      background: linear-gradient(to right, #b266ff, #cc99ff);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    button:hover {
+      background: #a85bf5;
+      transform: scale(1.05);
+    }
+
+    .frame-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .frame {
+      width: 90%;
+      max-width: 250px;
+      height: 140px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 3px solid #e6ccff;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(179, 128, 255, 0.4);
+      cursor: pointer;
+    }
+
+    .frame:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .preview-text {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: var(--text-shadow);
+    }
+
+    .letter p {
+      max-width: 90%;
+      margin: 2rem auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      white-space: normal;
+      animation: typing 6s steps(60, end), blink 0.8s step-end infinite;
+      overflow: hidden;
+      border-right: 2px solid white;
+      text-shadow: var(--text-shadow);
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: white; }
+      50% { border-color: transparent; }
+    }
+
+    img.full {
+      max-width: 90vw;
+      max-height: 60vh;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .frame {
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts-container" id="hearts"></div>
+
+  <button class="music-button" onclick="toggleMusic()">🎵</button>
+  <audio id="bgMusic" loop>
+    <source src="your-music.mp3" type="audio/mp3">
+  </audio>
+
+  <div class="loading-screen">
+<div class="garden">
+  <svg class="tulip" viewBox="0 0 64 64">
+    <path d="M32 2c-2.2 2.6-4 6-4 10s1.8 7.4 4 10c2.2-2.6 4-6 4-10s-1.8-7.4-4-10z" fill="#993399"/>
+    <path d="M32 22c-7.2 0-13 5.8-13 13 0 9 13 27 13 27s13-18 13-27c0-7.2-5.8-13-13-13z" fill="#cc66cc"/>
+  </svg>
+
+  <svg class="tulip" viewBox="0 0 64 64">
+    <path d="M32 2c-2.2 2.6-4 6-4 10s1.8 7.4 4 10c2.2-2.6 4-6 4-10s-1.8-7.4-4-10z" fill="#993399"/>
+    <path d="M32 22c-7.2 0-13 5.8-13 13 0 9 13 27 13 27s13-18 13-27c0-7.2-5.8-13-13-13z" fill="#cc66cc"/>
+  </svg>
+
+  <svg class="tulip" viewBox="0 0 64 64">
+    <path d="M32 2c-2.2 2.6-4 6-4 10s1.8 7.4 4 10c2.2-2.6 4-6 4-10s-1.8-7.4-4-10z" fill="#993399"/>
+    <path d="M32 22c-7.2 0-13 5.8-13 13 0 9 13 27 13 27s13-18 13-27c0-7.2-5.8-13-13-13z" fill="#cc66cc"/>
+  </svg>
+</div>
+
+    <p style="margin-bottom: 2rem;">Loading your birthday magic...</p>
+  </div>
+
+  <div class="container" id="intro">
+    <h1>Happy Birthday My Love!</h1>
+    <button onclick="showSection('main')">Click to Begin</button>
+  </div>
+
+  <div class="container" id="main">
+    <h1>Choose a Surprise</h1>
+    <div class="frame-container">
+      <div class="frame" onclick="showSection('letterPage')">
+        <div class="preview-text">Letter</div>
+      </div>
+      <div class="frame" onclick="showSection('picturePage')">
+        <div class="preview-text">Picture</div>
+      </div>
+    </div>
+    <button onclick="showSection('intro')">Go Back</button>
+  </div>
+
+  <div class="container" id="letterPage">
+    <h1>My Letter to You</h1>
+    <div class="letter">
+      <p>
+        Happy Birthday sayo honey, it's been long napo and this day is actually I've waiting for. Before i say something, kamusta naman po ikaw honey? Do you feel naba na you're lucky po ikaw honey? Asking na feeling lucky dahil your saying na you having unlucky po honey sa july po and actually I'm doing po na maging lucky kapo honey this month. Its a small action i take and i hope na it would make feel parin na lucky kapo honey.
+
+I waiting this moment dahil ito yung moment na birthday na ng pinakamamahal ko, having a plan minsan pero hindi gumagana kaya stick ako minsan sa backup plan. There's the time na kailangan ko i spent yung oras ko and causing na naguguhol nako sa oras. Despite of anything that i did, ito napo honey yung time na what if i make a another website? sounds boring dahil i make many website about you po and feel na nakakasawa na, pero taking a risk parin na magustuhan mopo ito. Each time i make and i failed sometime in my website, Hindi parin ako susuko this website that i create is best animation for me.
+
+Thank you that you staying at me, everyone jealous to us because of having a strong relationship that no one can break a chain of us (subukan nila lagot sila sakin).
+
+I know na sometimes na nahihirapan kana po lalo na sa akademiko, dahil sa mga bibigay sainyo, gayunpaman, kaya mopo ito nilagpasan and I'm so proud na halos i want to flex it sa mga magagandang balita na nangyari sayo po honey, I'm very proud of you dahil hindi mo inaayan yung sarili mo na mahulog kahit nalulunog kana lalo sa pag grupo, nandito ako at handa akong tulungan ka, i know I'm busy man pero i still manage parin yung time natin (i can manage my sleep as well). Nandito lang ako, bigyan Kang saya sa panahong malungkot ka, I'm a person na hindi ko hinahayaang malungkot ang isang tao specially you. 
+
+Your too special for me, dahil i can't explain myself na gaanong ako kasaya na nakasama ko Yung pinapangarap kong tao, nanaginip pa nga ako na may ka-holding hands ako and that event is actually true.
+
+Happy birthday po honey, and once again, I'm here to be your rest place if you needed. You're so sweet, kind, pretty, cute, and care person I've never meet and ikaw na yun.
+
+Happy birthday my Chelsea, I always love you always.
+      </p>
+    </div>
+    <button onclick="showSection('main')">Back</button>
+  </div>
+
+  <div class="container" id="picturePage">
+    <h1>Our Picture</h1>
+    <img src="your-picture.jpg" alt="Us" class="full" />
+    <button onclick="showSection('main')">Back</button>
+  </div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll(".container").forEach(el => el.classList.remove("show"));
+      setTimeout(() => document.getElementById(id).classList.add("show"), 50);
+    }
+
+    function toggleMusic() {
+      const music = document.getElementById("bgMusic");
+      const button = document.querySelector(".music-button");
+      if (music.paused) {
+        music.play();
+        button.classList.add("playing");
+      } else {
+        music.pause();
+        button.classList.remove("playing");
+      }
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.querySelector(".loading-screen").style.display = "none";
+        showSection("intro");
+      }, 5000);
+
+      const heartsContainer = document.getElementById("hearts");
+      for (let i = 0; i < 40; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 5 + 5) + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        heartsContainer.appendChild(heart);
+      }
+    });
+  </script>
+</body>
+</html>
